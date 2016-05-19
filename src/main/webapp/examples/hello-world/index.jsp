@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <%@ page import="canvas.SignedRequest" %>
 <%@ page import="java.util.Map" %>
 <%

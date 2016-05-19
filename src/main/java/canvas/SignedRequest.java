@@ -26,20 +26,23 @@
 
 package canvas;
 
-import org.apache.commons.codec.binary.Base64;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectReader;
-import org.codehaus.jackson.type.TypeReference;
-
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
+
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Base64;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectReader;
+import org.codehaus.jackson.type.TypeReference;
+
+import sun.misc.BASE64Decoder;
 
 /**
  *
@@ -86,8 +89,16 @@ public class SignedRequest {
 
         String encodedSig = split[0];
         String encodedEnvelope = split[1];
-
-        String json_envelope = new String(new Base64(true).decode(encodedEnvelope));
+        
+        BASE64Decoder decoder = new BASE64Decoder();
+        String json_envelope = null;
+        try {
+        	json_envelope = new String(decoder.decodeBuffer(encodedEnvelope),"utf-8");
+        }
+        catch (IOException e) {
+        	e.printStackTrace();
+        }
+        //String json_envelope = new String(new Base64(true).decode(encodedEnvelope));
         ObjectMapper mapper = new ObjectMapper();
 
         String algorithm;
